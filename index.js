@@ -10,7 +10,11 @@ const app = express();
 
 const ports = process.env.PORT || 3000;
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(express.json())  // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
+
 /*
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');

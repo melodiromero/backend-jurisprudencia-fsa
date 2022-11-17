@@ -6,9 +6,11 @@ module.exports = class Fallo {
     this.numeroFallo  = numeroFallo;
     this.tribunal     = tribunal;
     this.tipoFallo    = tipoFallo;
-    this.fecha        = fecha;
+    this.fechaFallo   = fechaFallo;
     this.caratula     = caratula;
     this.sumarios_relacionados = sumarios_relacionados;
+    this.descriptores = descriptores;
+
   }
 
   static fetchAll() {
@@ -25,19 +27,33 @@ module.exports = class Fallo {
 
   }
 
-  static get(numeroFallo, tribunal) {
-    // coloque lso parametros numeroFallo y tribunal como para buscar en un principio, luego agregare los demas.}
+  static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores ) {
+    
 
-    let falloBuscado = " SELECT f.Id_Fallos AS id_fallo, f.NroFallo AS numeroFallo, " ;
+    let falloBuscado = " SELECT f.Id_Fallos AS id_fallo, f.NroFallo AS numeroFallo, f.Organismo	AS id_tribunal, " ;
     falloBuscado     += " t.descripcion AS tribunal, IF(f.Tipo =1, 'AUTO INTERLOCUTORIO', 'SENTENCIA') AS tipoFallo,";
-    falloBuscado     += " DATE_FORMAT(f.Fecha,'%d/%m/%Y') AS fecha,  f.Partes AS caratula, f.Fallo, f.Fecha as fechaAlta, ";
+    falloBuscado     += " f.FechaFallo as fechaFallo,  f.Partes AS caratula, f.Fallo, f.Fecha as fechaAlta, ";
     falloBuscado     += " GROUP_CONCAT( j.ID_SUMARIO SEPARATOR ',') AS sumarios_relacionados, ";
     falloBuscado     += " GROUP_CONCAT( j.TEMA SEPARATOR ', ') AS descriptores ";
     falloBuscado     += " FROM fallos AS f INNER JOIN tribunales AS t ON f.Organismo = t.idtribunal ";
-    falloBuscado     += " INNER JOIN jurisprudencia AS j ON f.NroFallo = j.NROFALLO WHERE f.NroFallo = ? AND  f.Organismo = ? AND t.Activo = 1 GROUP BY f.Id_Fallos" ;
+    falloBuscado     += " INNER JOIN jurisprudencia AS j ON f.NroFallo = j.NROFALLO WHERE t.Activo = 1 " ;
 
-    return db.execute(falloBuscado, [numeroFallo, tribunal]);
-    //return db.execute('CALL SP_LeerFallos2(NULL,?)',[numeroFallo]);
+    if (id_fallo) {
+      falloBuscado     += "  AND f.Id_Fallos = " + id_fallo ;
+    }
+
+    if (numeroFallo) {
+      falloBuscado     += "  AND f.NroFallo = " + numeroFallo ;
+    }
+
+    if (tribunal) {
+      falloBuscado     += "  AND f.Organismo = " + tribunal ;
+    }
+
+  
+    return db.execute(falloBuscado);
+
+    //return db.execute('CALL SP_LeerFallos2(?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores]);
   }
 
 };
