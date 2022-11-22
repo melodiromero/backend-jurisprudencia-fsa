@@ -12,7 +12,7 @@ module.exports = class Fallo {
     this.descriptores = descriptores;
 
   }
-
+/*
   static fetchAll() {
     //return db.execute('CALL SP_LeerFallos()');
     let todosFallos = " SELECT f.Id_Fallos AS id_fallo, f.NroFallo AS numeroFallo, " ;
@@ -26,7 +26,7 @@ module.exports = class Fallo {
     return db.execute(todosFallos);
 
   }
-
+*/
   static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores ) {
     
 
@@ -36,7 +36,7 @@ module.exports = class Fallo {
     falloBuscado     += " GROUP_CONCAT( j.ID_SUMARIO SEPARATOR ',') AS sumarios_relacionados, ";
     falloBuscado     += " GROUP_CONCAT( j.TEMA SEPARATOR ', ') AS descriptores ";
     falloBuscado     += " FROM fallos AS f INNER JOIN tribunales AS t ON f.Organismo = t.idtribunal ";
-    falloBuscado     += " INNER JOIN jurisprudencia AS j ON f.NroFallo = j.NROFALLO WHERE t.Activo = 1 " ;
+    falloBuscado     += " LEFT JOIN jurisprudencia AS j ON f.NroFallo = j.NROFALLO WHERE t.Activo = 1 " ;
 
     if (id_fallo) {
       falloBuscado     += "  AND f.Id_Fallos = " + id_fallo ;
@@ -50,7 +50,18 @@ module.exports = class Fallo {
       falloBuscado     += "  AND f.Organismo = " + tribunal ;
     }
 
-  
+    if (tipoFallo == 1) {
+      falloBuscado     += "  AND f.Tipo = '1' ";
+    }
+
+    if (!tipoFallo == 1) {
+      falloBuscado     += "  AND f.Tipo != 1 ";
+    }
+
+
+    falloBuscado     += " GROUP BY f.`Id_Fallos`  ORDER BY  1 DESC ";
+    console.log('cadeena ', falloBuscado);
+
     return db.execute(falloBuscado);
 
     //return db.execute('CALL SP_LeerFallos2(?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores]);

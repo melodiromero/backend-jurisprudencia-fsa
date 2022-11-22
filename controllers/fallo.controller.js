@@ -1,5 +1,6 @@
 const Fallos = require('../models/fallo.model');
 // Obtiene todos los fallos.
+/*
 exports.getAllFallos = async (req, res, next) => {
   try {
     const [todosFallos] = await Fallos.fetchAll();
@@ -11,6 +12,7 @@ exports.getAllFallos = async (req, res, next) => {
     next(err);
   }
 };
+*/
 
 // Obtiene los fallos segun los parametros de busqueda.
 exports.getFallos = async (req, res, next) => {  
@@ -27,7 +29,8 @@ exports.getFallos = async (req, res, next) => {
   let descriptores  =  req.query.descriptores;
 
   try{
-    if(!id_fallo && !numeroFallo && !tribunal && !tipoFallo && !fechaFallo) { // Validación de datos - el usuario debe ingresar al menos un parámetro de búsqueda. }
+    
+    if(!id_fallo && !numeroFallo && !tribunal && !tipoFallo && !fechaFallo && !caratula && !descriptores) { // Validación de datos - el usuario debe ingresar al menos un parámetro de búsqueda. }
       throw new Error('Faltan datos. Por favor, debe ingresar almenos un parámetro de búsqueda . ');
     } //redirección al catch
     
