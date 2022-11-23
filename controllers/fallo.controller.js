@@ -34,6 +34,14 @@ exports.getFallos = async (req, res, next) => {
       throw new Error('Faltan datos. Por favor, debe ingresar almenos un parámetro de búsqueda . ');
     } //redirección al catch
     
+    if (caratula && caratula.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por carátula debe ingresar una frase con más de 3 caracteres.');
+    }
+
+    if (descriptores && descriptores.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+    }
+
     const [leerFallos] = await Fallos.get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores);
     console.log('mensaje', leerFallos);
 

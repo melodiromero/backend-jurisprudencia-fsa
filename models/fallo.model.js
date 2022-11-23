@@ -43,21 +43,35 @@ module.exports = class Fallo {
     }
 
     if (numeroFallo) {
-      falloBuscado     += "  AND f.NroFallo = " + numeroFallo ;
+      falloBuscado     += " AND f.NroFallo = " + numeroFallo ;
     }
 
     if (tribunal) {
-      falloBuscado     += "  AND f.Organismo = " + tribunal ;
+      falloBuscado     += " AND f.Organismo = " + tribunal ;
     }
 
     if (tipoFallo == 1) {
-      falloBuscado     += "  AND f.Tipo = '1' ";
+      falloBuscado     += " AND f.Tipo = '1' ";
     }
 
     if (!tipoFallo == 1) {
-      falloBuscado     += "  AND f.Tipo != 1 ";
+      falloBuscado     += " AND f.Tipo != 1 ";
     }
 
+
+    if (fechaFallo) {
+      falloBuscado     += " AND f.FechaFallo = '" + fechaFallo + "' ";
+    }
+
+
+    if (caratula && caratula.length > 3) {
+        falloBuscado     += " AND MATCH(f.Partes) AGAINST ('" + caratula + "' ) ";
+    }
+    /*
+    if (descriptores && descriptores.length > 3) {
+      falloBuscado     += " AND MATCH(GROUP_CONCAT( j.TEMA SEPARATOR ', ')) AGAINST ('" + descriptores + "' ) ";
+    }
+  */
 
     falloBuscado     += " GROUP BY f.`Id_Fallos`  ORDER BY  1 DESC ";
     console.log('cadeena ', falloBuscado);
