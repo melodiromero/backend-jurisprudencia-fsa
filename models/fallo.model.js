@@ -27,9 +27,9 @@ module.exports = class Fallo {
 
   }
 */
-  static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores ) {
+  static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores) {
     
-
+/*
     let falloBuscado = " SELECT f.Id_Fallos AS id_fallo, f.NroFallo AS numeroFallo, f.Organismo	AS id_tribunal, " ;
     falloBuscado     += " t.descripcion AS tribunal, IF(f.Tipo =1, 'AUTO INTERLOCUTORIO', 'SENTENCIA') AS tipoFallo,";
     falloBuscado     += " f.FechaFallo as fechaFallo,  f.Partes AS caratula, f.Fallo, f.Fecha as fechaAlta, ";
@@ -71,14 +71,18 @@ module.exports = class Fallo {
     if (descriptores && descriptores.length > 3) {
       falloBuscado     += " AND MATCH(GROUP_CONCAT( j.TEMA SEPARATOR ', ')) AGAINST ('" + descriptores + "' ) ";
     }
-  */
+  
 
     falloBuscado     += " GROUP BY f.`Id_Fallos`  ORDER BY  1 DESC ";
     console.log('cadeena ', falloBuscado);
 
-    return db.execute(falloBuscado);
+    return db.execute(falloBuscado);*/
 
-    //return db.execute('CALL SP_LeerFallos2(?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores]);
+   // return db.execute('CALL c1jurisprudencia.SP_LeerFallos2(?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo]);
+    //console.log(db.execute('CALL c1jurisprudencia.SP_LeerFallos2(?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo]));
+    
+    return db.query('CALL c1jurisprudencia.SP_LeerFallos(?,?,?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores]);
+
   }
 
 };

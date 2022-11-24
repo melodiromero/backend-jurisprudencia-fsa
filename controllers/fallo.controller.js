@@ -1,3 +1,4 @@
+const Fallo = require('../models/fallo.model');
 const Fallos = require('../models/fallo.model');
 // Obtiene todos los fallos.
 /*
@@ -45,15 +46,16 @@ exports.getFallos = async (req, res, next) => {
     const [leerFallos] = await Fallos.get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores);
     console.log('mensaje', leerFallos);
 
-    if (leerFallos.length == 0) {
+    if (leerFallos[0].length === 0) {
       throw new Error ("No se hallaron resultados, verifique sus parámetros de busqueda.");
     };
 
-    res.status(200).json(leerFallos);
-
+    res.status(200).json(leerFallos[0]);
+   
   }catch(e){
     console.error(e.message);
     // BAD_REQUEST (400)
+
     res.status(400).send({'mensaje': e.message});
     next(e);
   }  
