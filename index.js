@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 
 const rutaFallos = require('./routes/fallo.router');
 
+const rutaSumarios = require('./routes/sumario.router');
+
 const errores = require('./controllers/error.controller');
 
 const app = express();
@@ -24,6 +26,8 @@ app.use((req, res, next) => {
 });
 */
 app.use('/fallos', rutaFallos);
+
+app.use('/sumarios', rutaSumarios);
 
 app.use(errores.get404);
 
