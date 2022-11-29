@@ -15,7 +15,7 @@ module.exports = class Fallo {
   
   static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre) { 
     
-    return db.query('CALL c1jurisprudencia.SP_LeerFallos(?,?,?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre]);
+    return db.query('CALL c1jurisprudencia.SP_LeerFallos(?,?,?,?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre]);
   
   }
 

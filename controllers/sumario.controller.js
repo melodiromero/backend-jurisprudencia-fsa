@@ -5,12 +5,10 @@ const Sumarios = require('../models/sumario.model');
 exports.getSumarios = async (req, res, next) => {  
   // req.query is mostly used for searching,sorting, filtering, pagination, e.t.c
   
-  console.log('datos', req.query);
-  
   let id_sumario    =  req.query.id_sumario;
   let numeroFallo   =  req.query.numeroFallo;
   let tribunal      =  req.query.tribunal;
-  let fechaFallo    =  req.query.fechaFallo;
+  let fecha         =  req.query.fecha;
   let caratula      =  req.query.caratula;
   let firmantes     =  req.query.firmantes;
   let descriptores  =  req.query.descriptores;
@@ -18,7 +16,7 @@ exports.getSumarios = async (req, res, next) => {
 
   try{
     
-    if(!id_sumario && !numeroFallo && !tribunal && !fechaFallo && !caratula && !firmantes && !descriptores && !palabraLibre) { // Validación de datos - el usuario debe ingresar al menos un parámetro de búsqueda. }
+    if(!id_sumario && !numeroFallo && !tribunal && !fecha && !caratula && !firmantes && !descriptores && !palabraLibre) { // Validación de datos - el usuario debe ingresar al menos un parámetro de búsqueda. }
       throw new Error('Faltan datos. Por favor, debe ingresar almenos un parámetro de búsqueda . ');
     } //redirección al catch
     
@@ -38,7 +36,7 @@ exports.getSumarios = async (req, res, next) => {
         throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
     }
 
-    const [leerSumarios] = await Sumarios.get(id_sumario, numeroFallo, tribunal, fechaFallo, caratula, firmantes, descriptores, palabraLibre);
+    const [leerSumarios] = await Sumarios.get(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre);
     console.log('mensaje', leerSumarios);
 
     if (leerSumarios[0].length === 0) {
