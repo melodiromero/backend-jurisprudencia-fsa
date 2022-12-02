@@ -22,6 +22,10 @@ exports.getFallos = async (req, res, next) => {
       throw new Error('Faltan datos. Por favor, debe ingresar almenos un parámetro de búsqueda . ');
     } //redirección al catch
     
+    if (fechaFallo && fechaFallo.length != 10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    }
+
     if (caratula && caratula.length <= 3) {
       throw new Error('Faltan datos. Para buscar por carátula debe ingresar una frase con más de 3 caracteres.');
     }

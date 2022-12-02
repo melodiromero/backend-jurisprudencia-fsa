@@ -1,7 +1,6 @@
 const Sumarios = require('../models/sumario.model');
-// Obtiene todos los fallos.
 
-// Obtiene los fallos segun los parametros de busqueda.
+// Obtiene los sumarios segun los parametros de busqueda.
 exports.getSumarios = async (req, res, next) => {  
   // req.query is mostly used for searching,sorting, filtering, pagination, e.t.c
   
@@ -47,7 +46,6 @@ exports.getSumarios = async (req, res, next) => {
    
   }catch(e){
     console.error(e.message);
-    // BAD_REQUEST (400)
 
     res.status(400).send({'mensaje': e.message});
     next(e);
