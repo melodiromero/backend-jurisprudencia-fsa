@@ -1,52 +1,46 @@
-const express = require('express');
+const express           = require('express');
 
-//const bodyParser = require('body-parser');
+const jwt               = require('jsonwebtoken');
 
-const jwt = require('jsonwebtoken');
+const rutaFallos        = require('./routes/fallo.router');
 
-const unless    = require('express-unless'); // Para determinar que rutas vale el Middleware
+const rutaSumarios      = require('./routes/sumario.router');
 
-const rutaFallos = require('./routes/fallo.router');
+const rutaTribunales    = require('./routes/tribunal.router');
 
-const rutaSumarios = require('./routes/sumario.router');
+const rutaLogin         = require('./routes/login.router');
 
-const rutaTribunales = require('./routes/tribunal.router');
+const errores           = require('./controllers/error.controller');
 
-const errores = require('./controllers/error.controller');
+const app               = express();
 
-const app = express();
+const ports             = process.env.PORT || 3000;
 
-const ports = process.env.PORT || 3000;
-/*
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-*/
+//app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse various different custom JSON types as JSON
+//app.use(bodyParser.json({ type: 'application/*+json' }))
+//app.use(express.json());
+
 
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json()); // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
 
-/*
-
 const auth = (req, res, next) =>{  // Middlewade de autenticacion
+
     try{
         //Inicio del reconocimiento del token
-        let token = req.headers['authorization'];
-    
+        
+        let token = req.headers.authorization;
         if (!token){
             throw new Error("No estas logueado");
         }
     
-        token = token.replace('Bearer ','');
-    
-        jwt.verify(token, 'Secret',(err, user)=>{
-            /*if (err){
-                res.status(401).send({error: "Token inválido"});
-            }else{
-                console.log("usuario valido", user);
-                res.status(202).send({message:"usuario valido" });
-    
-            }*//*
+        token = token.split(" ")[1];
+       
+        jwt.verify(token, 'Secret Password',(err, user)=>{
+           console.log('errro',err,'user',user);
             if (err){
                 console.log('token invalido');
                 res.status(401).send({error: "Token inválido"});
@@ -60,49 +54,13 @@ const auth = (req, res, next) =>{  // Middlewade de autenticacion
     }
 }
 
-auth.unless = unless;
+app.use('/login', rutaLogin);
 
-app.use(auth.unless({ //Se especifica para que rutas no funciona la autenticacion
-    path: [
-        {url: '/login', method: ['POST']}
-    ]
-}));*/
+app.use('/fallos', auth, rutaFallos);
 
-/*
-// Se realiza un login estatico:
-app.use('/login',(req,res) => {
+app.use('/sumarios', auth, rutaSumarios);
 
-    try{
-        if( !req.body.usuario || !req.body.clave ){
-            res.status(401).send({error: "Falta usuario y clave"});
-            return;
-        }
-
-        if (req.body.usuario == "ADMIN" && req.body.clave == "1234"){
-            const  tokenData = {
-                alias: 'usuarioConsulta'
-            }
-
-            const token = jwt.sign(tokenData, 'Secret',{
-                expiresIn: 60*60*24 //expira en 24hs.
-            });
-
-            res.send({token});
-        }else{
-            res.status(401).send({error:"Usuario y/o clave incorrectas"});
-        }
-   }catch(e){
-        console.error(e.message);
-       res.status(413).send({"mensaje": e.message + " error inesperado"});
-    }
-
-});
-*/
-app.use('/fallos', rutaFallos);
-
-app.use('/sumarios', rutaSumarios);
-
-app.use('/tribunales',rutaTribunales);
+app.use('/tribunales', auth, rutaTribunales);
 
 app.use(errores.get404);
 
