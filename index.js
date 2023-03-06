@@ -12,9 +12,18 @@ const rutaLogin         = require('./routes/login.router');
 
 const errores           = require('./controllers/error.controller');
 
+const cors              = require('cors');
+
 const app               = express();
 
-const ports             = process.env.PORT || 3000;
+const ports             = process.env.PORT || 30;
+
+var corsOptions = {
+    origin: 'localhost',
+    optionsSuccessStatus: 200 // For legacy browser support
+}
+
+app.use(cors()); 
 
 //app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -23,10 +32,20 @@ const ports             = process.env.PORT || 3000;
 //app.use(express.json());
 
 
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.urlencoded({ extended: false }));
 
-app.use(express.json()); // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
+//app.use(express.json()); // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
+// Configurar cabeceras y cors
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
+
+/*
 const auth = (req, res, next) =>{  // Middlewade de autenticacion
 
     try{
@@ -53,14 +72,14 @@ const auth = (req, res, next) =>{  // Middlewade de autenticacion
         res.status(403).send({message: e.message});
     }
 }
-
+*/
 app.use('/login', rutaLogin);
 
-app.use('/fallos', auth, rutaFallos);
+app.use('/fallos',  rutaFallos);
 
-app.use('/sumarios', auth, rutaSumarios);
+app.use('/sumarios',  rutaSumarios);
 
-app.use('/tribunales', auth, rutaTribunales);
+app.use('/tribunales',  rutaTribunales);
 
 app.use(errores.get404);
 
