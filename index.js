@@ -34,7 +34,7 @@ app.use(cors());
 
 //app.use(express.urlencoded({ extended: false }));
 
-//app.use(express.json()); // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
+app.use(express.json()); // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

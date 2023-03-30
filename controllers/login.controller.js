@@ -2,9 +2,7 @@ const jwt = require('jsonwebtoken');
 
 exports.getLogin = async (req, res, next) => {  
   // req.query is mostly used for searching,sorting, filtering, pagination, e.t.c
-  
-  console.log('llega aqui', req.body);
-  
+
   var usuario = req.body.usuario;
   var clave   = req.body.clave;
 
