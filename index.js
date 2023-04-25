@@ -8,6 +8,8 @@ const rutaSumarios      = require('./routes/sumario.router');
 
 const rutaTribunales    = require('./routes/tribunal.router');
 
+const rutaReporte       = require('./routes/reporte.router');
+
 const rutaLogin         = require('./routes/login.router');
 
 const errores           = require('./controllers/error.controller');
@@ -16,7 +18,7 @@ const cors              = require('cors');
 
 const app               = express();
 
-const ports             = process.env.PORT || 30;
+const ports             = process.env.PORT || 3016;
 
 var corsOptions = {
     origin: 'localhost',
@@ -80,6 +82,8 @@ app.use('/fallos',  rutaFallos);
 app.use('/sumarios',  rutaSumarios);
 
 app.use('/tribunales',  rutaTribunales);
+
+app.use('/reporte',  rutaReporte);
 
 app.use(errores.get404);
 
