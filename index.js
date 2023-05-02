@@ -21,7 +21,7 @@ const app               = express();
 const ports             = process.env.PORT || 3016;
 
 var corsOptions = {
-    origin: 'localhost',
+    origin: "*://localhost/*",
     optionsSuccessStatus: 200 // For legacy browser support
 }
 
@@ -40,14 +40,17 @@ app.use(express.json()); // Para uso del request body -- Remember to use express
 // Configurar cabeceras y cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Headers', 'Authorization, Cache-Control, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header("Access-Control-Allow-Headers", '*'); // esto me permitio que funcione el Get con parametros variados de GET fallos
     next();
 });
-
-
 /*
+res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+res.setHeader("Access-Control-Allow-Headers", "Authorization, Cache-Control, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+
+*/
 const auth = (req, res, next) =>{  // Middlewade de autenticacion
 
     try{
@@ -74,7 +77,7 @@ const auth = (req, res, next) =>{  // Middlewade de autenticacion
         res.status(403).send({message: e.message});
     }
 }
-*/
+
 app.use('/login', rutaLogin);
 
 app.use('/fallos',  rutaFallos);
