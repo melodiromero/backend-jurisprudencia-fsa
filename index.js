@@ -2,15 +2,15 @@ const express           = require('express');
 
 const jwt               = require('jsonwebtoken');
 
-const rutaFallos        = require('./routes/fallo.router');
+const rutaFallos        = require('./routes/v1.0/fallo.router');
 
-const rutaSumarios      = require('./routes/sumario.router');
+const rutaSumarios      = require('./routes/v1.0/sumario.router');
 
-const rutaTribunales    = require('./routes/tribunal.router');
+const rutaTribunales    = require('./routes/v1.0/tribunal.router');
 
-const rutaReporte       = require('./routes/reporte.router');
+const rutaReporte       = require('./routes/v1.0/reporte.router');
 
-const rutaLogin         = require('./routes/login.router');
+const rutaLogin         = require('./routes/v1.0/login.router');
 
 const errores           = require('./controllers/error.controller');
 
@@ -21,11 +21,9 @@ const app               = express();
 const ports             = process.env.PORT || 3016;
 
 var corsOptions = {
-    origin: "*://localhost/*",
-    optionsSuccessStatus: 200 // For legacy browser support
+    origin: "*"
 }
-
-app.use(cors()); 
+app.use(cors(corsOptions));
 
 //app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -34,23 +32,22 @@ app.use(cors());
 //app.use(express.json());
 
 
-//app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json()); // Para uso del request body -- Remember to use express.json() middleware to parse request body else you'll get an error 
 // Configurar cabeceras y cors
+
+//Middleware en Express
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, Cache-Control, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header("Access-Control-Allow-Headers", '*'); // esto me permitio que funcione el Get con parametros variados de GET fallos
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.setHeader('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
-/*
-res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-res.setHeader("Access-Control-Allow-Headers", "Authorization, Cache-Control, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 
-*/
+
+
 const auth = (req, res, next) =>{  // Middlewade de autenticacion
 
     try{
@@ -78,15 +75,15 @@ const auth = (req, res, next) =>{  // Middlewade de autenticacion
     }
 }
 
-app.use('/login', rutaLogin);
+app.use('/api/v1.0/login', rutaLogin);
 
-app.use('/fallos',  rutaFallos);
+app.use('/api/v1.0/jurisprudencia/fallos',  rutaFallos);
 
-app.use('/sumarios',  rutaSumarios);
+app.use('/api/v1.0/sumarios',  rutaSumarios);
 
-app.use('/tribunales',  rutaTribunales);
+app.use('/api/v1.0/tribunales',  rutaTribunales);
 
-app.use('/reporte',  rutaReporte);
+app.use('/api/v1.0/reporte',  rutaReporte);
 
 app.use(errores.get404);
 

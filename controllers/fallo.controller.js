@@ -1,6 +1,60 @@
 const Fallos = require('../models/fallo.model');
 // Obtiene todos los fallos.
 
+// Obtiene un fallo por id
+exports.getFalloById = async (req, res, next) => {  
+
+  let id      =  req.query.id;
+
+  try{
+    
+    if(!id) { 
+      throw new Error('Parámetro inválido.');
+    }
+    
+    const [leerFallo] = await Fallos.getById(id, false);
+ 
+    
+    if (leerFallo[0].length === 0) {
+      throw new Error ("Error en parámetro de consulta.");
+    };
+
+    const regFallo = JSON.parse(leerFallo[0]);
+
+    
+        
+    console.log(regFallo.id_fallo);
+    console.log('tipo de dato', typeof(regFallo));
+
+
+   
+    res.status(200).json(
+      {
+        "document": 
+        { 
+           "metadata": 
+           {
+              "uuid": 0,
+              "document-type" : "jurisprudencia"
+           },
+            
+           "content": leerFallo[0]
+
+        }
+      });
+   
+  }catch(e){
+    console.error(e.message);
+    // BAD_REQUEST (400)
+
+    res.status(400).send({'mensaje': e.message});
+    next(e);
+  }  
+
+};
+
+
+
 // Obtiene los fallos segun los parametros de busqueda.
 exports.getFallos = async (req, res, next) => {  
   // req.query is mostly used for searching,sorting, filtering, pagination, e.t.c
