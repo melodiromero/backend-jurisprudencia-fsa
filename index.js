@@ -79,7 +79,7 @@ app.use('/api/v1.0/login', rutaLogin);
 
 app.use('/api/v1.0/jurisprudencia/fallos',  rutaFallos);
 
-app.use('/api/v1.0/sumarios',  rutaSumarios);
+app.use('/api/v1.0/jurisprudencia/sumarios',  rutaSumarios);
 
 app.use('/api/v1.0/tribunales',  rutaTribunales);
 

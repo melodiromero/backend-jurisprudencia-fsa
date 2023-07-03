@@ -21,7 +21,14 @@ module.exports = class Sumario {
   
   }
 
-  static get(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre) { 
+  
+  static getById(id_sumario) { 
+    
+    return db.query('CALL c1jurisprudencia.SP_api_LeerSumariosPorId(?)',[id_sumario]);
+  
+  }
+
+  static getById(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre) { 
     
     return db.query('CALL c1jurisprudencia.SP_LeerSumarios(?,?,?,?,?,?,?,?)',[id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre]);
   

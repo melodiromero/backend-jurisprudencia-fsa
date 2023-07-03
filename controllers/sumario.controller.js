@@ -1,5 +1,99 @@
 const Sumarios = require('../models/sumario.model');
 
+// Obtiene un fallo por id  - segun especificacion SAIJ
+exports.getSumarioById = async (req, res, next) => {  
+
+  let id      =  req.query.id;
+
+  try{
+    
+    if(!id) { 
+      throw new Error('Parámetro inválido.');
+    }
+    
+    const [leerSumario] = await Sumarios.getById(id);
+    
+    if (leerSumario[0].length === 0) {
+      throw new Error ("Error en parámetro de consulta.");
+    };
+/*
+    const [leerSumarios] = await Sumarios.getSumariosByFallo(leerFallo[0][0].id_interno, leerFallo[0][0].id_tribunal, resume);
+
+    let array_sumarios, sumarios = [];
+
+    if (leerSumarios[0].length > 0) {
+      // Guardamos los datos del sumario en un array de sumarios.-
+      array_sumarios = leerSumarios[0]
+      for (let clave in array_sumarios){
+
+        sumarios.push({
+                      "uid_sumario":      array_sumarios[clave].id_sumario,
+                      "id_sumario":       array_sumarios[clave].id_sumario,
+                      "titulo_sumario":   array_sumarios[clave].titulo_sumario,
+                      "texto_sumario":    array_sumarios[clave].texto_sumario,
+                      "magistrados":      [
+                                            {
+                                              "nombre":  array_sumarios[clave].firmantes,
+                                              "voto"  :  null
+                                            }
+                                          ]
+                      })
+      }
+    
+    };
+*/
+
+    let regSumario = {
+                  "id_sumario":             leerSumario[0][0].id_sumario,
+                  "titulo":                 leerSumario[0][0].titulo,
+                  "texto":                  leerSumario[0][0].texto,
+                  "id_fallo":               leerSumario[0][0].fecha,
+                  "id_interno":             leerSumario[0][0].id_interno,
+                  "id-infojus":             null,
+
+                  "referencias-normativas": [],
+                  
+                  "descriptores":           leerSumario[0][0].tema,
+
+
+
+
+                  "fallos-relacionados":    []
+                }
+
+    res.status(200).json(
+      {
+        "document": 
+        { 
+           "metadata": 
+           {
+              "uuid": regSumario.id_fallo,
+              "document-type" : "jurisprudencia"
+           },
+            
+           "content": regSumario
+
+        }
+      });
+   
+  }catch(e){
+    console.error(e.message);
+    res.status(400).send({'mensaje': e.message});
+    next(e);
+  }  
+
+};
+
+
+
+
+
+
+
+
+
+
+
 // Obtiene los sumarios segun el numero de fallo y el id de tribunal.
 exports.getSumarios = async (req, res, next) => {  
   //  Obtiene los sumarios segun el numero de fallo y el id de tribunal.
