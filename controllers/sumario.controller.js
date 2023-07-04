@@ -1,5 +1,6 @@
 const Sumarios = require('../models/sumario.model');
 
+const Fallos = require('../models/fallo.model');
 // Obtiene un fallo por id  - segun especificacion SAIJ
 exports.getSumarioById = async (req, res, next) => {  
 
@@ -7,7 +8,7 @@ exports.getSumarioById = async (req, res, next) => {
 
   try{
     
-    if(!id) { 
+    if(!id){ 
       throw new Error('Parámetro inválido.');
     }
     
@@ -16,50 +17,62 @@ exports.getSumarioById = async (req, res, next) => {
     if (leerSumario[0].length === 0) {
       throw new Error ("Error en parámetro de consulta.");
     };
-/*
-    const [leerSumarios] = await Sumarios.getSumariosByFallo(leerFallo[0][0].id_interno, leerFallo[0][0].id_tribunal, resume);
 
-    let array_sumarios, sumarios = [];
+    const [leerFallos] = await Fallos.getById(leerSumario[0][0].id_fallo, leerSumario[0][0].id_tribunal, resume);
 
-    if (leerSumarios[0].length > 0) {
+    let array_fallos, fallos = [];
+
+    if (leerFallos[0].length > 0) {
       // Guardamos los datos del sumario en un array de sumarios.-
-      array_sumarios = leerSumarios[0]
-      for (let clave in array_sumarios){
+      array_fallos = leerFallos[0]
 
-        sumarios.push({
-                      "uid_sumario":      array_sumarios[clave].id_sumario,
-                      "id_sumario":       array_sumarios[clave].id_sumario,
-                      "titulo_sumario":   array_sumarios[clave].titulo_sumario,
-                      "texto_sumario":    array_sumarios[clave].texto_sumario,
-                      "magistrados":      [
-                                            {
-                                              "nombre":  array_sumarios[clave].firmantes,
-                                              "voto"  :  null
-                                            }
-                                          ]
-                      })
-      }
+      for (let clave in array_fallos){
+        fallos.push({
+                        "metadata": 
+                        {
+                          "uuid": array_fallos[clave].id_fallo,
+                          "document-type" : "jurisprudencia"
+                        },
+                        
+                        "content": 
+                        {
+                          "id_fallo":             array_fallos[clave].id_fallo,
+                          "tipo_fallo":           array_fallos[clave].tipoFallo,
+                          "tribunal":             array_fallos[clave].tribunal, 
+                          "fecha":                array_fallos[clave].fecha, 
+                          'jurisdiccion': 
+                                                  {
+                                                    "tipo": "LOCAL",
+                                                    "pais": "Argentina",
+                                                    "provincia": "FORMOSA",
+                                                    "localidad":  array_fallos[clave].localidad,
+                                                    "id_pais": 11
+                                                  },
+                          "caratula":             {
+                                                    "actor": null,
+                                                    "demandado": null,
+                                                    "sobre": array_fallos[clave].caratula, 
+                                                  },
+                          "urlApi":               null,
+                          "fecha_umod":           array_fallos[clave].fecha_umod
+                        }
+            
+                    })
     
-    };
-*/
+      }
+    }
 
     let regSumario = {
                   "id_sumario":             leerSumario[0][0].id_sumario,
                   "titulo":                 leerSumario[0][0].titulo,
                   "texto":                  leerSumario[0][0].texto,
-                  "id_fallo":               leerSumario[0][0].fecha,
+                  "fecha":                  leerSumario[0][0].fecha,
                   "id_interno":             leerSumario[0][0].id_interno,
                   "id-infojus":             null,
-
                   "referencias-normativas": [],
-                  
                   "descriptores":           leerSumario[0][0].tema,
-
-
-
-
-                  "fallos-relacionados":    []
-                }
+                  "fallos-relacionados":    fallos
+                    }
 
     res.status(200).json(
       {
@@ -67,7 +80,7 @@ exports.getSumarioById = async (req, res, next) => {
         { 
            "metadata": 
            {
-              "uuid": regSumario.id_fallo,
+              "uuid": regSumario.id_sumario,
               "document-type" : "jurisprudencia"
            },
             

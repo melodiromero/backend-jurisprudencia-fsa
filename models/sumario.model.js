@@ -15,20 +15,20 @@ module.exports = class Sumario {
   }
 
 
-  static getSumariosByFallo(numeroFallo, id_tribunal, resume) { 
+  static getByFallo(numeroFallo, id_tribunal, resume) { 
     
     return db.query('CALL c1jurisprudencia.SP_api_LeerSumarioPorFallo(?,?, ?)',[numeroFallo, id_tribunal, resume]);
   
   }
 
   
-  static getById(id_sumario) { 
+  static  getById(id_sumario) { 
     
     return db.query('CALL c1jurisprudencia.SP_api_LeerSumariosPorId(?)',[id_sumario]);
   
   }
 
-  static getById(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre) { 
+  static get(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre) { 
     
     return db.query('CALL c1jurisprudencia.SP_LeerSumarios(?,?,?,?,?,?,?,?)',[id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre]);
   

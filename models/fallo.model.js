@@ -14,7 +14,7 @@ module.exports = class Fallo {
   }
   
   static getById(id_fallo) { 
-    return db.query('CALL c1jurisprudencia.SP_api_LeerFalloPorId(?)',[id_fallo]);
+    return db.query('CALL c1jurisprudencia.SP_api_LeerFalloPorId(?, ?, ?)',[id_fallo, null, null]);
   }
 
   static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre) { 

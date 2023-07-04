@@ -14,14 +14,14 @@ exports.getFalloById = async (req, res, next) => {
       throw new Error('Parámetro inválido.');
     }
     
-    const [leerFallo] = await Fallos.getById(id);
+    const [leerFallo] = await Fallos.getById(id, null, null);
     
     
     if (leerFallo[0].length === 0) {
       throw new Error ("Error en parámetro de consulta.");
     };
 
-    const [leerSumarios] = await Sumarios.getSumariosByFallo(leerFallo[0][0].id_interno, leerFallo[0][0].id_tribunal, resume);
+    const [leerSumarios] = await Sumarios.getByFallo(leerFallo[0][0].id_interno, leerFallo[0][0].id_tribunal, resume);
 
     let array_sumarios, sumarios = [];
 
