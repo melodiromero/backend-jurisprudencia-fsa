@@ -106,8 +106,69 @@ exports.getFalloById = async (req, res, next) => {
 
 };
 
+// Obtiene los fallos segun los parametros de busqueda.
+exports.getFallos = async (req, res, next) => {  
+   
+  console.log('datos', req.query);
+  
+  let jurisdiccion      =  req.query.jurisdiccion;
+  let provincia         =  req.query.provincia;
+  let publicacion_desde =  req.query.publicacion_desde;
+  let publicacion_hasta =  req.query.publicacion_hasta;
+  let fecha_umod        =  req.query.fecha_umod;
+  let texto             =  req.query.texto;
+  let descriptores      =  req.query.descriptores;
+  let tribunal          =  req.query.tribunal;
+  let limit             =  req.query.limit;
+  let offset            =  req.query.offset;
+  
+  try{
+    /* Algunas validaciones si es que ingresa el parámetro */
+    
+    if (publicacion_desde && publicacion_desde.length != 10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    }
+    
+    if (publicacion_hasta && publicacion_hasta.length != 10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    }
 
+    if (fecha_umod && fecha_umod.length != 10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    }
 
+    if (descriptores && descriptores.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por descriptores debe ingresar una frase con más de 3 caracteres.');
+    }
+
+    if (tribunal && tribunal.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+    }
+
+    if (texto && texto.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+    }
+
+    const [leerFallos] = await Fallos.get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre);
+    console.log('mensaje', leerFallos);
+
+    if (leerFallos[0].length === 0) {
+      throw new Error ("No se hallaron resultados, verifique sus parámetros de busqueda.");
+    };
+
+    res.status(200).json(leerFallos[0]);
+   
+  }catch(e){
+    console.error(e.message);
+    // BAD_REQUEST (400)
+
+    res.status(400).send({'mensaje': e.message});
+    next(e);
+  }  
+
+};
+
+/*
 // Obtiene los fallos segun los parametros de busqueda.
 exports.getFallos = async (req, res, next) => {  
   // req.query is mostly used for searching,sorting, filtering, pagination, e.t.c
@@ -164,3 +225,4 @@ exports.getFallos = async (req, res, next) => {
 
 };
 
+*/

@@ -1,6 +1,6 @@
-const Sumarios = require('../models/sumario.model');
+const Sumarios  = require('../models/sumario.model');
 
-const Fallos = require('../models/fallo.model');
+const Fallos    = require('../models/fallo.model');
 // Obtiene un fallo por id  - segun especificacion SAIJ
 exports.getSumarioById = async (req, res, next) => {  
 
@@ -13,48 +13,52 @@ exports.getSumarioById = async (req, res, next) => {
     }
     
     const [leerSumario] = await Sumarios.getById(id);
-    
+
     if (leerSumario[0].length === 0) {
       throw new Error ("Error en parámetro de consulta.");
     };
 
-    const [leerFallos] = await Fallos.getById(leerSumario[0][0].id_fallo, leerSumario[0][0].id_tribunal, resume);
+    const leerFallos = await Fallos.getById(null, leerSumario[0][0].numeroFallo, leerSumario[0][0].id_tribunal);
 
-    let array_fallos, fallos = [];
+    const array_fallos = leerFallos[0]; // Suponiendo que los resultados estén en el índice 0
 
-    if (leerFallos[0].length > 0) {
-      // Guardamos los datos del sumario en un array de sumarios.-
-      array_fallos = leerFallos[0]
+    if (array_fallos[0] == '[]') {
+      throw new Error("Error: no hay fallo para ese sumario, inconsistencia de datos.");
+    }
 
-      for (let clave in array_fallos){
+    let fallos = [];
+
+    if (array_fallos[0].length > 0) {
+     
+      for (let clave in array_fallos[0]){
         fallos.push({
                         "metadata": 
                         {
-                          "uuid": array_fallos[clave].id_fallo,
+                          "uuid": array_fallos[0][clave].id_fallo,
                           "document-type" : "jurisprudencia"
                         },
                         
                         "content": 
                         {
-                          "id_fallo":             array_fallos[clave].id_fallo,
-                          "tipo_fallo":           array_fallos[clave].tipoFallo,
-                          "tribunal":             array_fallos[clave].tribunal, 
-                          "fecha":                array_fallos[clave].fecha, 
+                          "id_fallo":             array_fallos[0][clave].id_fallo,
+                          "tipo_fallo":           array_fallos[0][clave].tipoFallo,
+                          "tribunal":             array_fallos[0][clave].tribunal, 
+                          "fecha":                array_fallos[0][clave].fecha, 
                           'jurisdiccion': 
                                                   {
                                                     "tipo": "LOCAL",
                                                     "pais": "Argentina",
                                                     "provincia": "FORMOSA",
-                                                    "localidad":  array_fallos[clave].localidad,
+                                                    "localidad":  array_fallos[0][clave].localidad,
                                                     "id_pais": 11
                                                   },
                           "caratula":             {
                                                     "actor": null,
                                                     "demandado": null,
-                                                    "sobre": array_fallos[clave].caratula, 
+                                                    "sobre": array_fallos[0][clave].caratula, 
                                                   },
                           "urlApi":               null,
-                          "fecha_umod":           array_fallos[clave].fecha_umod
+                          "fecha_umod":           array_fallos[0][clave].fecha_umod
                         }
             
                     })

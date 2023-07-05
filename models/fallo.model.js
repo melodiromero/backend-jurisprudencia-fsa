@@ -13,8 +13,8 @@ module.exports = class Fallo {
     this.palabraLibre = palabraLibre;
   }
   
-  static getById(id_fallo) { 
-    return db.query('CALL c1jurisprudencia.SP_api_LeerFalloPorId(?, ?, ?)',[id_fallo, null, null]);
+  static getById(id_fallo, numeroFallo, idtribunal) { 
+    return db.query('CALL c1jurisprudencia.SP_api_LeerFalloPorId(?, ?, ?)',[id_fallo, numeroFallo, idtribunal]);
   }
 
   static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre) { 
