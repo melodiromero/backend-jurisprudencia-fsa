@@ -118,7 +118,7 @@ exports.getFallos = async (req, res, next) => {
   let texto             =  req.query.texto;
   let descriptores      =  req.query.descriptores;
   let tribunal          =  req.query.tribunal;
-  let limit             =  req.query.limit;
+  let limit             =  req.query.limit;                                                           
   let offset            =  req.query.offset;
   
   try{
@@ -148,7 +148,7 @@ exports.getFallos = async (req, res, next) => {
       throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
     }
 
-    const [leerFallos] = await Fallos.get(jurisdiccion, provincia, publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, limit, offset);
+    const [leerFallos] = await Fallos.getFallos(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, limit, offset);
     
     console.log('mensaje', leerFallos);
 
@@ -157,9 +157,9 @@ exports.getFallos = async (req, res, next) => {
     };
 
     let fallos, sumarios = [];
-    let array_fallos =  eerFallos[0];
-    (array_fallos.length > 0)
-    {
+    let array_fallos = leerFallos[0];
+
+    if (array_fallos.length > 0){
    
       for (let clave in array_fallos){
 
@@ -196,8 +196,9 @@ exports.getFallos = async (req, res, next) => {
                  
                         
                       }
-                   });
-    
+              });
+      }
+    }
     res.status(200).json(
       {
         "document": 
@@ -206,19 +207,16 @@ exports.getFallos = async (req, res, next) => {
            {
               "results"     : "",
               "query"       : "",
-              "offset"      : "",
-              "pageSize"    : ""        
+              "offset"      : offset,
+              "pageSize"    : limit        
            },
            "DocumentResultList": 
            {
               "fallos"      : fallos
           }
         }
-      });
-   
-
-
-
+    });
+      
   }catch(e){
     console.error(e.message);
     // BAD_REQUEST (400)

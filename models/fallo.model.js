@@ -16,10 +16,10 @@ module.exports = class Fallo {
   static getById(id_fallo, numeroFallo, idtribunal) { 
     return db.query('CALL c1jurisprudencia.SP_api_LeerFalloPorId(?, ?, ?)',[id_fallo, numeroFallo, idtribunal]);
   }
-
-  static get(id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre) { 
+  
+  static get(jurisdiccion, provincia, publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, limit, offset) { 
     
-    return db.query('CALL c1jurisprudencia.SP_LeerFallos(?,?,?,?,?,?,?,?)',[id_fallo, numeroFallo, tribunal, tipoFallo, fechaFallo, caratula, descriptores, palabraLibre]);
+    return db.query('CALL c1jurisprudencia.SP_LeerFallos(?,?,?,?,?,?,?,?,?)',[jurisdiccion, provincia, publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, limit, offset]);
   
   }
 
