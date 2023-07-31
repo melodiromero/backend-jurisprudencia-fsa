@@ -13,24 +13,22 @@ module.exports = class Sumario {
     this.palabraLibre = palabraLibre;
     this.resume       = resume;
   }
-
-
+  // getByFallo recupera los sumarios por nro y tribunal
   static getByFallo(numeroFallo, id_tribunal, resume) { 
     
     return db.query('CALL c1jurisprudencia.SP_api_LeerSumarioPorFallo(?,?, ?)',[numeroFallo, id_tribunal, resume]);
   
   }
-
-  
+   // getById recupera el sumario por el id
   static  getById(id_sumario) { 
     
     return db.query('CALL c1jurisprudencia.SP_api_LeerSumariosPorId(?)',[id_sumario]);
   
   }
 
-  static get(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre) { 
+  static get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit,total) { 
     
-    return db.query('CALL c1jurisprudencia.SP_LeerSumarios(?,?,?,?,?,?,?,?)',[id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre]);
+    return db.query('CALL c1jurisprudencia.SP_api_LeerSumarios(?,?,?,?,?,?,?,?,?)',[publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit,total]);
   
   }
 

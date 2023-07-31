@@ -23,9 +23,10 @@ exports.getFalloById = async (req, res, next) => {
 
     const [leerSumarios] = await Sumarios.getByFallo(leerFallo[0][0].id_interno, leerFallo[0][0].id_tribunal, resume);
 
-    let array_sumarios, sumarios = [];
+    let array_sumarios = [];
+    let sumarios =  [];
 
-    (leerSumarios[0].length > 0)
+    if(leerSumarios[0].length > 0)
     {
       // Guardamos los datos del sumario en un array de sumarios.-
       array_sumarios = leerSumarios[0]
@@ -109,9 +110,6 @@ exports.getFalloById = async (req, res, next) => {
 exports.getFallos = async (req, res, next) => {  
    
   console.log('datos', req.query);
-  
-  let jurisdiccion      =  req.query.jurisdiccion;
-  let provincia         =  req.query.provincia;
   let publicacion_desde =  req.query.publicacion_desde;
   let publicacion_hasta =  req.query.publicacion_hasta;
   let fecha_umod        =  req.query.fecha_umod;
@@ -124,16 +122,16 @@ exports.getFallos = async (req, res, next) => {
   try{
     /* Algunas validaciones si es que ingresa el parámetro */
     
-    if (publicacion_desde && publicacion_desde.length != 10) {
-      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    if (publicacion_desde && publicacion_desde.length < 10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
     
-    if (publicacion_hasta && publicacion_hasta.length != 10) {
-      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    if (publicacion_hasta && publicacion_hasta.length < 10 ) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
 
-    if (fecha_umod && fecha_umod.length != 10) {
-      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: dd/mm/aaaa.');
+    if (fecha_umod && fecha_umod.length <10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
 
     if (descriptores && descriptores.length <= 3) {
@@ -141,14 +139,17 @@ exports.getFallos = async (req, res, next) => {
     }
 
     if (tribunal && tribunal.length <= 3) {
-      throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+      throw new Error('Faltan datos. Para buscar por tribunal debe ingresar términos con más de 3 caracteres.');
     }
 
     if (texto && texto.length <= 3) {
-      throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+      throw new Error('Faltan datos. Para buscar por texto debe ingresar términos con más de 3 caracteres.');
     }
-
-    const [leerFallos] = await Fallos.getFallos(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, limit, offset);
+    // Se lee primero el total de registros de la consulta
+    const [total] = await Fallos.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, tribunal, offset, limit, true);
+    
+    // Descriptores no paso pues los fallos no tienen descriptores.
+    const [leerFallos] = await Fallos.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, tribunal, offset, limit, false);
     
     console.log('mensaje', leerFallos);
 
@@ -156,13 +157,35 @@ exports.getFallos = async (req, res, next) => {
       throw new Error ("No se hallaron resultados, verifique sus parámetros de busqueda.");
     };
 
-    let fallos, sumarios = [];
-    let array_fallos = leerFallos[0];
+    let fallos = [];
+    let array_fallos = [];
+    let sumarios = [];
+    let array_sumarios = [];
 
-    if (array_fallos.length > 0){
-   
+    if (leerFallos[0].length > 0){
+      
+      array_fallos = leerFallos[0];
+
       for (let clave in array_fallos){
+        // Se buscan los sumarios de cada fallo
+        const [leerSumarios] = await Sumarios.getByFallo(array_fallos[clave].id_fallo, array_fallos[clave].id_tribunal, false);
+        // para cada registro de fallo, limpiamos las variables para los sumarios
+        array_sumarios = []; 
+        sumarios = []; 
+        if(leerSumarios[0].length > 0)
+        {
+          // Guardamos los datos del sumario en un array de sumarios.-
+          array_sumarios = leerSumarios[0]
+          for (let clave in array_sumarios){
+            sumarios.push({
+                          "id_sumario":       array_sumarios[clave].id_sumario,
+                          "titulo_sumario":   array_sumarios[clave].titulo_sumario,
+                          })
+          }
+        
+        };
 
+        // luego armamos los resultados de los fallos con sus sumarios
         fallos.push({
                       "metadata": 
                       {
@@ -174,8 +197,7 @@ exports.getFallos = async (req, res, next) => {
                       {
                         "id_fallo":          array_fallos[clave].id_fallo,
                         "tribunal":          array_fallos[clave].tribunal, 
-                        "tipo_tribunal":     null,
-                        "instancia":         null,
+                        "tipo_fallo":        array_fallos[clave].tipoFallo, 
                         "fecha":             array_fallos[clave].fecha, 
                         'jurisdiccion': 
                                                 {
@@ -191,7 +213,7 @@ exports.getFallos = async (req, res, next) => {
                                                   "sobre": array_fallos[0].caratula, 
                                                  },
                         "sumarios_relacionados": sumarios,
-                        "descriptores": [],
+                        "descriptores": null,
                         "fecha_umod":           array_fallos[0].fecha_umod
                  
                         
@@ -199,14 +221,15 @@ exports.getFallos = async (req, res, next) => {
               });
       }
     }
+
     res.status(200).json(
       {
         "document": 
         { 
            "SearchResultList": 
            {
-              "results"     : "",
-              "query"       : "",
+              "results"     : total[0][0].total,
+              "query"       : "<string>",
               "offset"      : offset,
               "pageSize"    : limit        
            },

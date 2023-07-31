@@ -85,7 +85,7 @@ exports.getSumarioById = async (req, res, next) => {
            "metadata": 
            {
               "uuid": regSumario.id_sumario,
-              "document-type" : "jurisprudencia"
+              "document-type" : "sumario"
            },
             
            "content": regSumario
@@ -102,92 +102,126 @@ exports.getSumarioById = async (req, res, next) => {
 };
 
 
-
-
-
-
-
-
-
-
-
-// Obtiene los sumarios segun el numero de fallo y el id de tribunal.
-exports.getSumarios = async (req, res, next) => {  
-  //  Obtiene los sumarios segun el numero de fallo y el id de tribunal.
-  
-
-  let numeroFallo   =  req.query.numeroFallo;
-  let tribunal      =  req.query.tribunal;
-  
-
-  try{
-    
-    if(!numeroFallo && !tribunal) { // Validación de datos - el usuario debe ingresar al menos un parámetro de búsqueda. }
-      throw new Error('Faltan datos. Por favor, debe ingresar almenos un parámetro de búsqueda . ');
-    } //redirección al catch
-    
-    const [leerSumarios] = await Sumarios.get(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre);
-    console.log('mensaje', leerSumarios);
-
-    if (leerSumarios[0].length === 0) {
-      throw new Error ("No se hallaron resultados, verifique sus parámetros de busqueda.");
-    };
-
-    res.status(200).json(leerSumarios[0]);
-   
-  }catch(e){
-    console.error(e.message);
-
-    res.status(400).send({'mensaje': e.message});
-    next(e);
-  }  
-
-};
-
-
 // Obtiene los sumarios segun los parametros de busqueda.
 exports.getSumarios = async (req, res, next) => {  
-  // req.query is mostly used for searching,sorting, filtering, pagination, e.t.c
-  
-  let id_sumario    =  req.query.id_sumario;
-  let numeroFallo   =  req.query.numeroFallo;
-  let tribunal      =  req.query.tribunal;
-  let fecha         =  req.query.fecha;
-  let caratula      =  req.query.caratula;
-  let firmantes     =  req.query.firmantes;
-  let descriptores  =  req.query.descriptores;
-  let palabraLibre  =  req.query.palabraLibre;
 
+  console.log('datos', req.query);
+  let publicacion_desde =  req.query.publicacion_desde;
+  let publicacion_hasta =  req.query.publicacion_hasta;
+  let fecha_umod        =  req.query.fecha_umod;
+  let texto             =  req.query.texto;
+  let descriptores      =  req.query.descriptores;
+  let tribunal          =  req.query.tribunal;
+  let limit             =  req.query.limit;                                                           
+  let offset            =  req.query.offset;
+  
   try{
+    /* Algunas validaciones si es que ingresa el parámetro */
     
-    if(!id_sumario && !numeroFallo && !tribunal && !fecha && !caratula && !firmantes && !descriptores && !palabraLibre) { // Validación de datos - el usuario debe ingresar al menos un parámetro de búsqueda. }
-      throw new Error('Faltan datos. Por favor, debe ingresar almenos un parámetro de búsqueda . ');
-    } //redirección al catch
+    if (publicacion_desde && publicacion_desde.length < 10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
+    }
     
-    if (caratula && caratula.length <= 3) {
-      throw new Error('Faltan datos. Para buscar por carátula debe ingresar una frase con más de 3 caracteres.');
+    if (publicacion_hasta && publicacion_hasta.length < 10 ) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
 
-    if (firmantes && firmantes.length <= 3) {
-      throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+    if (fecha_umod && fecha_umod.length <10) {
+      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
 
     if (descriptores && descriptores.length <= 3) {
-        throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+      throw new Error('Faltan datos. Para buscar por descriptores debe ingresar una frase con más de 3 caracteres.');
     }
 
-    if (palabraLibre && palabraLibre.length <= 3) {
-        throw new Error('Faltan datos. Para buscar por voces debe ingresar términos con más de 3 caracteres.');
+    if (tribunal && tribunal.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por tribunal debe ingresar términos con más de 3 caracteres.');
     }
 
-    const [leerSumarios] = await Sumarios.get(id_sumario, numeroFallo, tribunal, fecha, caratula, firmantes, descriptores, palabraLibre);
+    if (texto && texto.length <= 3) {
+      throw new Error('Faltan datos. Para buscar por texto debe ingresar términos con más de 3 caracteres.');
+    }
+
+    // Se lee primero el total de registros de la consulta
+    const [total] = await Sumarios.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, true);
+    
+    const [leerSumarios] = await Sumarios.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, false);
     console.log('mensaje', leerSumarios);
 
     if (leerSumarios[0].length === 0) {
       throw new Error ("No se hallaron resultados, verifique sus parámetros de busqueda.");
     };
+    
+    if (leerSumarios[0] == '[]') {
+      throw new Error("Error: no hay sumarios.");
+    }
 
-    res.status(200).json(leerSumarios[0]);
+    let sumarios = [];
+
+    if (leerSumarios[0].length > 0) {
+     
+      for (let clave in leerSumarios[0]){
+        sumarios.push({
+                        "metadata": 
+                        {
+                          "uuid": leerSumarios[0][clave].id_fallo,
+                          "document-type" : "sumario"
+                        },
+                        
+                        "content": 
+                          {
+                            "id_sumario":             leerSumarios[0][0].id_sumario,
+                            'jurisdiccion': 
+                                                      {
+                                                        "tipo": "LOCAL",
+                                                        "pais": "Argentina",
+                                                        "provincia": "FORMOSA",
+                                                        "localidad":  leerSumarios[0][0].localidad,
+                                                        "id_pais": 11
+                                                      },
+                            "fecha":                  leerSumarios[0][0].fecha,
+                            "id_interno":             leerSumarios[0][0].id_interno,
+                            "titulo":                 leerSumarios[0][0].titulo,
+                            "descriptores":           leerSumarios[0][0].tema,
+                            "fecha_umod":             leerSumarios[0][0].fecha
+                        }
+            
+                    })
+    
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    res.status(200).json(
+      {
+        "document": 
+        { 
+           "SearchResultList": 
+           {
+              "results"     : total[0][0].total,
+              "query"       : "<string>",
+              "offset"      : offset,
+              "pageSize"    : limit        
+           },
+           "DocumentResultList": 
+           {
+              "sumarios"      : sumarios
+          }
+        }
+    });
+      
    
   }catch(e){
     console.error(e.message);
@@ -197,4 +231,3 @@ exports.getSumarios = async (req, res, next) => {
   }  
 
 };
-
