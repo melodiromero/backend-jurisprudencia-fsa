@@ -1,17 +1,11 @@
 # API JURISPRUDENCIA FORMOSA
 
 ## Índice
-1. [Introducción ](#id1)
-2. [Autenticación ](#id2)
-3. [Solicitud de lectura](#id3)
-3.1. [Lectura de fallos por listado](#id4)
-3.2. [Lectura de fallos por ID](#id5)
-3.3. [Lectura de sumarios por listado](#id6)
-3.2. [Lectura de sumarios por ID](#id7)
-## 1. Introducción <a name="id1"></a>
+[[_TOC_]]
+## 1. Introducción
 La API (Interfaz de Programación de Aplicaciones) de Jurisprudencia permite realizar consultas al repositorio de los fallos y sumarios cargados por el Departamento de Informática Jurisprudencial del Poder Judicial de la Provincia de Formosa. Esta versión corresponde a la versión 1.0 y posibilita la lectura de las sentencias, los autos interlocutorios y sumarios, según la guía APIS SAIJ - JuFeJus Jurisprudencia - Versión 1.3.1.
 
-## 2. Autenticación <a name="id2"></a>
+## 2. Autenticación 
 Para usar la API es necesario logearse y autorizarse frente al mismo. Esto se logra agre-gando a todas las solicitudes un encabezado de autorización, usando el token que se adquiere al logearse con las siguientes credenciales en formato json:
 ```json
 { "usuario": "f4ll05", "clave": "jur15prud3nci4" }
@@ -30,7 +24,7 @@ Al desconectarse de la API, se retorna la repuesta:
 { "message": "Has sido desconectado" }
 ```
 
-## 3. Parámetros de consulta <a name="id3"></a>
+## 3. Parámetros de consulta
 Se presentan los siguientes parametros de busqueda en fallos y sumarios:
 | Parámetro     | Tipo de dato   |           Descripción        |
 |-------------- |----------------|------------------------------|
@@ -40,7 +34,7 @@ Se presentan los siguientes parametros de busqueda en fallos y sumarios:
 | publicacion_hasta  | string         |Formato YYYY-MM-DD           |
 | fecha_umod  | string         |Formato YYYY-MM-DD           |
 
-## 4. Solicitud de lectura <a name="id4"></a>
+## 4. Solicitud de lectura 
 Las peticiones de lectura se realizan mediante el método GET, el encabezado del token bearer otorgado al logearse, pasando parámetros de búsqueda y la ruta de acceso. Las peticiones de consulta envían sus respuestas en formato JSON.
 
 Las primeras cuatro peticiones son las solicitadas por el Proyecto de la Jufejus SAIJ:
@@ -54,12 +48,15 @@ Otras lecturas disponibles:
 
 Todas las peticiones pueden tener los siguientes posibles códigos HTTP de respuesta:
 
-• 200 OK: se resolvió correctamente la petición
-• 400 BAD REQUEST: petición incorrecta, por ej. falta un campo o su valor no es válido.
-• 404 NOT FOUND: recurso no hallado.
-• 500 INTERNAL SERVER ERROR: error del lado del servidor al intentar crear el recurso, p.ej. se ha caído la base de datos.
+- 200 OK: se resolvió correctamente la petición
 
-## 4. 1. Lectura de fallos por listado <a name="id5"></a>
+- 400 BAD REQUEST: petición incorrecta, por ej. falta un campo o su valor no es válido.
+
+- 404 NOT FOUND: recurso no hallado.
+
+- 500 INTERNAL SERVER ERROR: error del lado del servidor al intentar crear el recurso, p.ej. se ha caído la base de datos.
+
+### 4. 1. Lectura de fallos por listado 
 Devuelve el detalle del fallo (sea sentencia o auto interlocutorio) buscado, según los criterios proporcionados en los parámetros, más el token de autenticación.
 Llamada básica: GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/
 
