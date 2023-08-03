@@ -231,7 +231,7 @@ exports.getFallos = async (req, res, next) => {
               "results"     : total[0][0].total,
               "query"       : "<string>",
               "offset"      : offset,
-              "pageSize"    : limit        
+              "pageSize"    : fallos.length        
            },
            "DocumentResultList": 
            {

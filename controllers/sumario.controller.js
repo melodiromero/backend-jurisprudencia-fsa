@@ -192,18 +192,6 @@ exports.getSumarios = async (req, res, next) => {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     res.status(200).json(
       {
         "document": 
@@ -213,7 +201,7 @@ exports.getSumarios = async (req, res, next) => {
               "results"     : total[0][0].total,
               "query"       : "<string>",
               "offset"      : offset,
-              "pageSize"    : limit        
+              "pageSize"    : sumarios.length        
            },
            "DocumentResultList": 
            {
