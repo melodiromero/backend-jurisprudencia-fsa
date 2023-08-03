@@ -4,10 +4,10 @@
 1. [Introducción ](#id1)
 2. [Autenticación ](#id2)
 3. [Solicitud de lectura](#id3)
-3. 1. [Lectura de fallos por listado](#id4)
-3. 2. [Lectura de fallos por ID](#id5)
-3. 3. [Lectura de sumarios por listado](#id6)
-3. 2. [Lectura de sumarios por ID](#id7)
+3.1. [Lectura de fallos por listado](#id4)
+3.2. [Lectura de fallos por ID](#id5)
+3.3. [Lectura de sumarios por listado](#id6)
+3.2. [Lectura de sumarios por ID](#id7)
 ## 1. Introducción <a name="id1"></a>
 La API (Interfaz de Programación de Aplicaciones) de Jurisprudencia permite realizar consultas al repositorio de los fallos y sumarios cargados por el Departamento de Informática Jurisprudencial del Poder Judicial de la Provincia de Formosa. Esta versión corresponde a la versión 1.0 y posibilita la lectura de las sentencias, los autos interlocutorios y sumarios, según la guía APIS SAIJ - JuFeJus Jurisprudencia - Versión 1.3.1.
 
@@ -32,10 +32,13 @@ Al desconectarse de la API, se retorna la repuesta:
 
 ## 3. Parámetros de consulta <a name="id3"></a>
 Se presentan los siguientes parametros de busqueda en fallos y sumarios:
-| Parámetro    |      Tipo de dato               |   Descripción|
-|--------------|---------------------------------|--------------|
-| presentacion | incluye: 1. ddd 2. dddd 3. dddd |               |
-
+| Parámetro     | Tipo de dato   |           Descripción        |
+|-------------- |----------------|------------------------------|
+| jurisdiccion  | string         |Local en este caso.           |
+| provincia     | string         |Formosa en este caso.           |
+| publicacion_desde  | string         |Formato YYYY-MM-DD           |
+| publicacion_hasta  | string         |Formato YYYY-MM-DD           |
+| fecha_umod  | string         |Formato YYYY-MM-DD           |
 
 ## 4. Solicitud de lectura <a name="id4"></a>
 Las peticiones de lectura se realizan mediante el método GET, el encabezado del token bearer otorgado al logearse, pasando parámetros de búsqueda y la ruta de acceso. Las peticiones de consulta envían sus respuestas en formato JSON.
