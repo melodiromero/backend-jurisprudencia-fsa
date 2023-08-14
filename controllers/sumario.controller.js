@@ -71,10 +71,22 @@ exports.getSumarioById = async (req, res, next) => {
                   "titulo":                 leerSumario[0][0].titulo,
                   "texto":                  leerSumario[0][0].texto,
                   "fecha":                  leerSumario[0][0].fecha,
-                  "id_interno":             leerSumario[0][0].id_interno,
+                  "numero_interno":         leerSumario[0][0].numeroFallo,
                   "id-infojus":             null,
                   "referencias-normativas": [],
-                  "descriptores":           leerSumario[0][0].tema,
+                  "descriptores": {
+                                  "descriptor": [{
+                                              "elegido": {
+                                                          "termino": leerSumario[0][0].tema,
+                                                        },
+                                              "preferido": {
+                                                          "termino": null
+                                                        } ,
+                                              "sinonimos": {
+                                                          "termino": null
+                                                        }
+                                  }]
+                  },
                   "fallos-relacionados":    fallos
                     }
 
@@ -180,7 +192,7 @@ exports.getSumarios = async (req, res, next) => {
                                                         "id_pais": 11
                                                       },
                             "fecha":                  leerSumarios[0][0].fecha,
-                            "id_interno":             leerSumarios[0][0].id_interno,
+                            "numero_interno":         leerSumarios[0][0].id_interno,
                             "titulo":                 leerSumarios[0][0].titulo,
                             "descriptores":           leerSumarios[0][0].tema,
                             "fecha_umod":             leerSumarios[0][0].fecha
@@ -198,10 +210,11 @@ exports.getSumarios = async (req, res, next) => {
         { 
            "SearchResultList": 
            {
-              "results"     : total[0][0].total,
-              "query"       : "<string>",
-              "offset"      : offset,
-              "pageSize"    : sumarios.length        
+              "result"        : total[0][0].total,
+              "query"         : "<string>",
+              "expandedQuery" : "",
+              "offset"        : offset,
+              "pageSize"      : sumarios.length        
            },
            "DocumentResultList": 
            {

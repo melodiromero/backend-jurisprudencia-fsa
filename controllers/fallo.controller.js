@@ -33,7 +33,7 @@ exports.getFalloById = async (req, res, next) => {
       for (let clave in array_sumarios){
 
         sumarios.push({
-                      "uid_sumario":      array_sumarios[clave].id_sumario,
+                      "uid":              array_sumarios[clave].id_sumario,
                       "id_sumario":       array_sumarios[clave].id_sumario,
                       "titulo_sumario":   array_sumarios[clave].titulo_sumario,
                       "texto_sumario":    array_sumarios[clave].texto_sumario,
@@ -53,9 +53,9 @@ exports.getFalloById = async (req, res, next) => {
                   "subtipo_documento":    leerFallo[0][0].subtipo_documento,
                   "tipo_fallo":           leerFallo[0][0].tipoFallo,
                   "id_fallo":             leerFallo[0][0].id_fallo,
-                  "id_interno":           leerFallo[0][0].id_interno,
+                  "numero_interno":       leerFallo[0][0].id_interno,
                   "tribunal":             leerFallo[0][0].tribunal, 
-                  "tipo_tribunal":        null,
+                  "tipoTribunal":         null,
                   "instancia":            null,
                   "fecha":                leerFallo[0][0].fecha, 
                   'jurisdiccion': 
@@ -75,7 +75,7 @@ exports.getFalloById = async (req, res, next) => {
                   "fuente":               null,
                   "urlApi":               null,
                   "descriptores":         null,
-                  "texto_fallo":          leerFallo[0][0].texto, 
+                  "texto_completo":       leerFallo[0][0].texto, 
                   "magistrados":          [],
                   "sumarios_relacionados": sumarios,
                   "referencias-normativas": [],
@@ -228,10 +228,11 @@ exports.getFallos = async (req, res, next) => {
         { 
            "SearchResultList": 
            {
-              "results"     : total[0][0].total,
-              "query"       : "<string>",
-              "offset"      : offset,
-              "pageSize"    : fallos.length        
+              "result"        : total[0][0].total,
+              "query"         : "<string>",
+              "expandedQuery" : "",
+              "offset"        : offset,
+              "pageSize"      : fallos.length        
            },
            "DocumentResultList": 
            {
