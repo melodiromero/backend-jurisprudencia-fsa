@@ -13,6 +13,7 @@
 4.6. [Estadisticas ](#estadistica)
 ## 1. Introducción
 La API (Interfaz de Programación de Aplicaciones) de Jurisprudencia permite realizar consultas al repositorio de los fallos y sumarios cargados por el Departamento de Informática Jurisprudencial del Poder Judicial de la Provincia de Formosa. Esta versión corresponde a la versión 1.0 y posibilita la lectura de las sentencias, los autos interlocutorios y sumarios, según la guía APIS SAIJ - JuFeJus Jurisprudencia - Versión 1.3.1.
+Toda la info aquí descripta esta en la guia de la API de la Jurisprudencia de Formosa V1.0 [This link](GUIA%20API%20REST%20JURISPRUDENCIA%20Version%201.0%20-%20Actualizado.pdf) 
 
 ## 2. Autenticación 
 Para usar la API es necesario logearse y autorizarse frente al mismo. Esto se logra agre-gando a todas las solicitudes un encabezado de autorización, usando el token que se adquiere al logearse con las siguientes credenciales en formato json:
