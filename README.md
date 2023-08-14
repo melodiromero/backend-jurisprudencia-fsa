@@ -7,6 +7,10 @@
 4. [Solicitud de lectura ](#solicitud-lectura)
 4.1. [Lectura de fallos por id ](#lectura-fallos-id)
 4.2. [Lectura de fallos por listado ](#lectura-fallos-listado)
+4.3. [Lectura de sumarios por id ](#lectura-sumarios-id)
+4.4. [Lectura de sumarios por listado ](#lectura-sumarios-listado)
+4.5. [Lectura de tribunales ](#lectura-tribunales)
+4.6. [Estadisticas ](#estadistica)
 ## 1. Introducción
 La API (Interfaz de Programación de Aplicaciones) de Jurisprudencia permite realizar consultas al repositorio de los fallos y sumarios cargados por el Departamento de Informática Jurisprudencial del Poder Judicial de la Provincia de Formosa. Esta versión corresponde a la versión 1.0 y posibilita la lectura de las sentencias, los autos interlocutorios y sumarios, según la guía APIS SAIJ - JuFeJus Jurisprudencia - Versión 1.3.1.
 
@@ -217,4 +221,531 @@ GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos?publ
         }
     }
 }
+```
+
+### 4. 3. Lectura de sumarios por id 
+Devuelve el detalle del fallo (sea sentencia o auto interlocutorio) buscado, según los criterios proporcionados en los parámetros, más el token de autenticación.
+Llamada básica: GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/
+
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/sumarios/fulldocument/?id=5504
+```
+
+**Respuesta**
+```json
+{
+    "document": {
+        "metadata": {
+            "uuid": "5504",
+            "document-type": "sumario"
+        },
+        "content": {
+            "id_sumario": "5504",
+            "titulo": "\"A., H.N. y L., P.A. c/A., C.F. y otros s/Apelación Jdo. Civil, Comercial del Trabajo y de Menores -Las Lomitas-\"\nTRIBUNAL DE FAMILIA",
+            "texto": "La guarda judicial es un instituto de carácter altruista, y que de otorgarse no desobliga a\r\nlos progenitores de su responsabilidad parental.",
+            "fecha": "2016-03-10",
+            "id-infojus": null,
+            "referencias-normativas": [],
+            "descriptores": "GUARDA JUDICIAL : FUNCIÓN",
+            "fallos-relacionados": [
+                {
+                    "metadata": {
+                        "uuid": "9808",
+                        "document-type": "jurisprudencia"
+                    },
+                    "content": {
+                        "id_fallo": "9808",
+                        "tipo_fallo": "AUTO INTERLOCUTORIO",
+                        "tribunal": "TRIBUNAL DE FAMILIA",
+                        "fecha": "2016-03-10",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "caratula": {
+                            "actor": null,
+                            "demandado": null,
+                            "sobre": "A., H. N. Y L., P. A. C/ A., C. F. Y OTROS S/ APELACIÓN JDO. CIVIL, COMERCIAL DEL TRABAJO Y DE  DE MENORES – LAS LOMITAS-"
+                        },
+                        "urlApi": null,
+                        "fecha_umod": "2016-10-17"
+                    }
+                }
+            ]
+        }
+    }
+}
+```
+
+### 4. 4. Lectura de sumarios por listado 
+Devuelve el detalle del sumario, según los parámetros de búsqueda proporcionados, más el token de autenticación.
+
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/sumarios?publi-cacion_desde=2022-01-01&publicacion_hasta=2023-07-31&descriptores=CONTRATO DE AHORRO&texto=CONTRATO DE AHORRO&tribunal=CAMARA CIVIL Y COMER-CIAL&limit=1&offset=3
+```
+
+**Respuesta**
+```json
+{
+    "document": {
+        "SearchResultList": {
+            "results": 9,
+            "query": "<string>",
+            "offset": "3",
+            "pageSize": "9"
+        },
+        "DocumentResultList": {
+            "sumarios": [
+                {
+                    "metadata": {
+                        "document-type": "sumario"
+                    },
+                    "content": {
+                        "id_sumario": "6687",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "fecha": "2022-03-28",
+                        "id_interno": 6687,
+                        "titulo": "Chevrolet Sociedad Anónima de Ahorro para fines determinados s/Gomez, Miguel Norberto y/u otro s/Juicio de ejecución prendaria\nEXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "descriptores": "EJECUCIÓN PRENDARIA-CONTRATO DE AHORRO PARA FINES DETERMINADOS-GRUPOS CERRADOS-CRITERIO DEL TRIBUNAL: RÉGIMEN JURÍDICO; ALCANCES",
+                        "fecha_umod": "2022-03-28"
+                    }
+                },
+                {
+                    "metadata": {
+                        "document-type": "sumario"
+                    },
+                    "content": {
+                        "id_sumario": "6687",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "fecha": "2022-03-28",
+                        "id_interno": 6687,
+                        "titulo": "Chevrolet Sociedad Anónima de Ahorro para fines determinados s/Gomez, Miguel Norberto y/u otro s/Juicio de ejecución prendaria\nEXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "descriptores": "EJECUCIÓN PRENDARIA-CONTRATO DE AHORRO PARA FINES DETERMINADOS-GRUPOS CERRADOS-CRITERIO DEL TRIBUNAL: RÉGIMEN JURÍDICO; ALCANCES",
+                        "fecha_umod": "2022-03-28"
+                    }
+                },
+                {
+                    "metadata": {
+                        "document-type": "sumario"
+                    },
+                    "content": {
+                        "id_sumario": "6687",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "fecha": "2022-03-28",
+                        "id_interno": 6687,
+                        "titulo": "Chevrolet Sociedad Anónima de Ahorro para fines determinados s/Gomez, Miguel Norberto y/u otro s/Juicio de ejecución prendaria\nEXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "descriptores": "EJECUCIÓN PRENDARIA-CONTRATO DE AHORRO PARA FINES DETERMINADOS-GRUPOS CERRADOS-CRITERIO DEL TRIBUNAL: RÉGIMEN JURÍDICO; ALCANCES",
+                        "fecha_umod": "2022-03-28"
+                    }
+                },
+                {
+                    "metadata": {
+                        "document-type": "sumario"
+                    },
+                    "content": {
+                        "id_sumario": "6687",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "fecha": "2022-03-28",
+                        "id_interno": 6687,
+                        "titulo": "Chevrolet Sociedad Anónima de Ahorro para fines determinados s/Gomez, Miguel Norberto y/u otro s/Juicio de ejecución prendaria\nEXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "descriptores": "EJECUCIÓN PRENDARIA-CONTRATO DE AHORRO PARA FINES DETERMINADOS-GRUPOS CERRADOS-CRITERIO DEL TRIBUNAL: RÉGIMEN JURÍDICO; ALCANCES",
+                        "fecha_umod": "2022-03-28"
+                    }
+                },
+                {
+                    "metadata": {
+                        "document-type": "sumario"
+                    },
+                    "content": {
+                        "id_sumario": "6687",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "fecha": "2022-03-28",
+                        "id_interno": 6687,
+                        "titulo": "Chevrolet Sociedad Anónima de Ahorro para fines determinados s/Gomez, Miguel Norberto y/u otro s/Juicio de ejecución prendaria\nEXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "descriptores": "EJECUCIÓN PRENDARIA-CONTRATO DE AHORRO PARA FINES DETERMINADOS-GRUPOS CERRADOS-CRITERIO DEL TRIBUNAL: RÉGIMEN JURÍDICO; ALCANCES",
+                        "fecha_umod": "2022-03-28"
+                    }
+                },
+                {
+                    "metadata": {
+                        "document-type": "sumario"
+                    },
+                    "content": {
+                        "id_sumario": "6687",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "fecha": "2022-03-28",
+                        "id_interno": 6687,
+                        "titulo": "Chevrolet Sociedad Anónima de Ahorro para fines determinados s/Gomez, Miguel Norberto y/u otro s/Juicio de ejecución prendaria\nEXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "descriptores": "EJECUCIÓN PRENDARIA-CONTRATO DE AHORRO PARA FINES DETERMINADOS-GRUPOS CERRADOS-CRITERIO DEL TRIBUNAL: RÉGIMEN JURÍDICO; ALCANCES",
+                        "fecha_umod": "2022-03-28"
+                    }
+                }
+            ]
+        }
+    }
+}
+```
+
+### 4. 5. Lectura de tribunales
+Devuelve el detalle de un tribunal o más, según los criterios proporcionados en los parámetros, más el token proporcionado en la autenticación.
+Llamada básica: GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/tribunales/
+
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/tribunales
+```
+
+**Respuesta**
+```json
+[
+    {
+        "id_tribunal": 2,
+        "tribunal": "EXCMA. CAMARA CIVIL Y COMERCIAL"
+    },
+    {
+        "id_tribunal": 28,
+        "tribunal": "EXCMA. CAMARA CRIMINAL Y CORRECCIONAL"
+    },
+    {
+        "id_tribunal": 3,
+        "tribunal": "EXCMA. CAMARA CRIMINAL Y CORRECCIONAL Nº1"
+    },
+    {
+        "id_tribunal": 4,
+        "tribunal": "EXCMA. CAMARA CRIMINAL Y CORRECCIONAL Nº2"
+    },
+    {
+        "id_tribunal": 24,
+        "tribunal": "JGDO INST. Y CORRECC.  N° 1 - CLORINDA"
+    },
+    {
+        "id_tribunal": 26,
+        "tribunal": "JGDO INST. Y CORRECC. - LAS LOMITAS "
+    },
+    {
+        "id_tribunal": 29,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL"
+    },
+    {
+        "id_tribunal": 12,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 1"
+    },
+    {
+        "id_tribunal": 13,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 2"
+    },
+    {
+        "id_tribunal": 15,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 3"
+    },
+    {
+        "id_tribunal": 14,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 4"
+    },
+    {
+        "id_tribunal": 11,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 5"
+    },
+    {
+        "id_tribunal": 16,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 6"
+    },
+    {
+        "id_tribunal": 17,
+        "tribunal": "JUZGADO CIVIL Y COMERCIAL N° 7 - EC"
+    },
+    {
+        "id_tribunal": 10,
+        "tribunal": "JUZGADO DE EJECUCION PENAL"
+    },
+    {
+        "id_tribunal": 37,
+        "tribunal": "JUZGADO DE INSTRUCCIÓN Y CORRECCIONAL DEL FUERO CONTRA NARCOCRIMEN "
+    },
+    {
+        "id_tribunal": 9,
+        "tribunal": "JUZGADO DE MENORES"
+    },
+    {
+        "id_tribunal": 33,
+        "tribunal": "JUZGADO DE PAZ N° 1"
+    },
+    {
+        "id_tribunal": 34,
+        "tribunal": "JUZGADO DE PAZ N° 2"
+    },
+    {
+        "id_tribunal": 35,
+        "tribunal": "JUZGADO DE PAZ N° 3"
+    },
+    {
+        "id_tribunal": 36,
+        "tribunal": "JUZGADO DE PAZ N° 4"
+    },
+    {
+        "id_tribunal": 18,
+        "tribunal": "JUZGADO INSTRUCCION Y CORRECCIONAL N° 1"
+    },
+    {
+        "id_tribunal": 19,
+        "tribunal": "JUZGADO INSTRUCCION Y CORRECCIONAL N° 2"
+    },
+    {
+        "id_tribunal": 20,
+        "tribunal": "JUZGADO INSTRUCCION Y CORRECCIONAL N° 3"
+    },
+    {
+        "id_tribunal": 21,
+        "tribunal": "JUZGADO INSTRUCCION Y CORRECCIONAL N° 4"
+    },
+    {
+        "id_tribunal": 22,
+        "tribunal": "JUZGADO INSTRUCCION Y CORRECCIONAL N° 5"
+    },
+    {
+        "id_tribunal": 23,
+        "tribunal": "JUZGADO INSTRUCCION Y CORRECCIONAL N° 6"
+    },
+    {
+        "id_tribunal": 25,
+        "tribunal": "JZDO CIVIL, COMER. Y TRAB. - CLORINDA"
+    },
+    {
+        "id_tribunal": 32,
+        "tribunal": "STJ - SECRETARIA DE RECURSOS"
+    },
+    {
+        "id_tribunal": 31,
+        "tribunal": "STJ - SECRETARIA DE TRAMITES"
+    },
+    {
+        "id_tribunal": 1,
+        "tribunal": "SUPERIOR TRIBUNAL DE JUSTICIA"
+    },
+    {
+        "id_tribunal": 5,
+        "tribunal": "TRIBUNAL DE FAMILIA"
+    },
+    {
+        "id_tribunal": 27,
+        "tribunal": "TRIBUNAL DEL TRABAJO"
+    },
+    {
+        "id_tribunal": 6,
+        "tribunal": "TRIBUNAL DEL TRABAJO - SALA I"
+    },
+    {
+        "id_tribunal": 7,
+        "tribunal": "TRIBUNAL DEL TRABAJO - SALA II"
+    },
+    {
+        "id_tribunal": 8,
+        "tribunal": "TRIBUNAL DEL TRABAJO - SALA III"
+    }
+]
+```
+
+### 4. 6. Lectura de tribunales
+Devuelve el detalle del reporte, según los parámetros de búsqueda proporcionados, más el token de autenticación.
+Llamada básica: GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/reporte
+
+**Lectura general de fallos y sumarioss**
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/reporte
+```
+
+**Respuesta**
+```json
+[
+    {
+        "fallos": 17866,
+        "sumarios": 6590
+    }
+]
+```
+
+**Lectura por año de cantidad de fallos y sumarios**
+
+**Lectura general de fallos y sumarioss**
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/reporte/anio
+```
+
+**Respuesta**
+```json
+[
+    {
+        "anio": "2023",
+        "fallos": 529,
+        "sumarios": 64
+    },
+    {
+        "anio": "2022",
+        "fallos": 1082,
+        "sumarios": 243
+    },
+    {
+        "anio": "2021",
+        "fallos": 840,
+        "sumarios": 250
+    },
+    {
+        "anio": "2020",
+        "fallos": 868,
+        "sumarios": 0
+    },
+    {
+        "anio": "2019",
+        "fallos": 1344,
+        "sumarios": 10
+    },
+    {
+        "anio": "2018",
+        "fallos": 1497,
+        "sumarios": 365
+    },
+    {
+        "anio": "2017",
+        "fallos": 1192,
+        "sumarios": 242
+    },
+    {
+        "anio": "2016",
+        "fallos": 1253,
+        "sumarios": 464
+    },
+    {
+        "anio": "2015",
+        "fallos": 1006,
+        "sumarios": 181
+    },
+    {
+        "anio": "2014",
+        "fallos": 1066,
+        "sumarios": 304
+    },
+    {
+        "anio": "2013",
+        "fallos": 375,
+        "sumarios": 414
+    },
+    {
+        "anio": "2012",
+        "fallos": 1423,
+        "sumarios": 312
+    },
+    {
+        "anio": "2011",
+        "fallos": 1085,
+        "sumarios": 1
+    },
+    {
+        "anio": "2010",
+        "fallos": 1273,
+        "sumarios": 5
+    },
+    {
+        "anio": "2009",
+        "fallos": 819,
+        "sumarios": 2
+    },
+    {
+        "anio": "2008",
+        "fallos": 1191,
+        "sumarios": 3
+    },
+    {
+        "anio": "2007",
+        "fallos": 302,
+        "sumarios": 6
+    },
+    {
+        "anio": "2006",
+        "fallos": 267,
+        "sumarios": 0
+    },
+    {
+        "anio": "2005",
+        "fallos": 149,
+        "sumarios": 1
+    },
+    {
+        "anio": "2004",
+        "fallos": 48,
+        "sumarios": 0
+    },
+    {
+        "anio": "2003",
+        "fallos": 57,
+        "sumarios": 507
+    },
+    {
+        "anio": "2002",
+        "fallos": 60,
+        "sumarios": 316
+    },
+    {
+        "anio": "2001",
+        "fallos": 98,
+        "sumarios": 344
+    },
+    {
+        "anio": "2000",
+        "fallos": 19,
+        "sumarios": 289
+    },
+    {
+        "anio": "1999",
+        "fallos": 8,
+        "sumarios": 216
+    },
+    {
+        "anio": "1998",
+        "fallos": 13,
+        "sumarios": 363
+    },
+    {
+        "anio": "1994",
+        "fallos": 2,
+        "sumarios": 809
+    }
+]
 ```
