@@ -65,7 +65,10 @@ Todas las peticiones pueden tener los siguientes posibles códigos HTTP de respu
 Devuelve el detalle del fallo (sea sentencia o auto interlocutorio) buscado, según los criterios proporcionados en los parámetros, más el token de autenticación.
 Llamada básica: GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/fulldocument/ + ID
 **Ejemplo**
-GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/fulldocu-ment?id=17609
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/fulldocument?id=17609
+```
+
 
 **Respuesta**
 ```json
@@ -139,4 +142,79 @@ GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/full
 Devuelve el detalle del fallo (sea sentencia o auto interlocutorio) buscado, según los criterios proporcionados en los parámetros, más el token de autenticación.
 Llamada básica: GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos/
 
+```html
+GET https://api-biblioteca.jusformosa.gob.ar/api/v1.0/jurisprudencia/fallos?publicacion_desde=2022-01-01&publicacion_hasta=2022-12-30&tribunal=CAMARA CIVIL Y COMERCIAL&texto=JUICIO ORDINARIO&offset=357&limit=5 
+```
 
+
+**Respuesta**
+```json
+{
+    "document": {
+        "SearchResultList": {
+            "results": 359,
+            "query": "<string>",
+            "offset": "357",
+            "pageSize": "5"
+        },
+        "DocumentResultList": {
+            "fallos": [
+                {
+                    "metadata": {
+                        "uuid": "17354",
+                        "document-type": "jurisprudencia"
+                    },
+                    "content": {
+                        "id_fallo": "17354",
+                        "tribunal": "EXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "tipo_fallo": "SENTENCIA",
+                        "fecha": "2022-12-22",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "caratula": {
+                            "actor": null,
+                            "demandado": null,
+                            "sobre": "SUBELD&Iacute;A, ESTELA ALEJANDRA C/ CARRIZO, ANDREA CARINA FLORA Y/U OTROS S/ JUICIO ORDINARIO (DA&Ntilde;OS Y PERJUICIOS)"
+                        },
+                        "sumarios_relacionados": [],
+                        "descriptores": null,
+                        "fecha_umod": "2023-03-21"
+                    }
+                },
+                {
+                    "metadata": {
+                        "uuid": "17355",
+                        "document-type": "jurisprudencia"
+                    },
+                    "content": {
+                        "id_fallo": "17355",
+                        "tribunal": "EXCMA. CAMARA CIVIL Y COMERCIAL",
+                        "tipo_fallo": "SENTENCIA",
+                        "fecha": "2022-12-22",
+                        "jurisdiccion": {
+                            "tipo": "LOCAL",
+                            "pais": "Argentina",
+                            "provincia": "FORMOSA",
+                            "localidad": "FORMOSA",
+                            "id_pais": 11
+                        },
+                        "caratula": {
+                            "actor": null,
+                            "demandado": null,
+                            "sobre": "SUBELD&Iacute;A, ESTELA ALEJANDRA C/ CARRIZO, ANDREA CARINA FLORA Y/U OTROS S/ JUICIO ORDINARIO (DA&Ntilde;OS Y PERJUICIOS)"
+                        },
+                        "sumarios_relacionados": [],
+                        "descriptores": null,
+                        "fecha_umod": "2023-03-21"
+                    }
+                }
+            ]
+        }
+    }
+}
+```
