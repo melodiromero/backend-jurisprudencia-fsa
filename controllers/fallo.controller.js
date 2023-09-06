@@ -230,7 +230,7 @@ exports.getFallos = async (req, res, next) => {
            {
               "result"        : total[0][0].total,
               "query"         : "<string>",
-              "expandedQuery" : "",
+              "expandedQuery" : "...",
               "offset"        : offset,
               "pageSize"      : fallos.length        
            },

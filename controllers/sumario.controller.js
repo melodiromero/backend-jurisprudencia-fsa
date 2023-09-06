@@ -176,7 +176,7 @@ exports.getSumarios = async (req, res, next) => {
         sumarios.push({
                         "metadata": 
                         {
-                          "uuid": leerSumarios[0][clave].id_fallo,
+                          "uuid": leerSumarios[0][clave].id_sumario,
                           "document-type" : "sumario"
                         },
                         
@@ -212,7 +212,7 @@ exports.getSumarios = async (req, res, next) => {
            {
               "result"        : total[0][0].total,
               "query"         : "<string>",
-              "expandedQuery" : "",
+              "expandedQuery" : "...",
               "offset"        : offset,
               "pageSize"      : sumarios.length        
            },
