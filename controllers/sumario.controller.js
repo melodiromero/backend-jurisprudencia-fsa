@@ -71,7 +71,7 @@ exports.getSumarioById = async (req, res, next) => {
                   "titulo":                 leerSumario[0][0].titulo,
                   "texto":                  leerSumario[0][0].texto,
                   "fecha":                  leerSumario[0][0].fecha,
-                  "numero_interno":         leerSumario[0][0].numeroFallo,
+                  "numero-interno":         leerSumario[0][0].numeroFallo,
                   "id-infojus":             null,
                   "referencias-normativas": [],
                   "descriptores": {
@@ -117,7 +117,7 @@ exports.getSumarioById = async (req, res, next) => {
 // Obtiene los sumarios segun los parametros de busqueda.
 exports.getSumarios = async (req, res, next) => {  
 
-  console.log('datos', req.query);
+  console.log('inicio --------------- ', req.query);
   let publicacion_desde =  req.query.publicacion_desde;
   let publicacion_hasta =  req.query.publicacion_hasta;
   let fecha_umod        =  req.query.fecha_umod;
@@ -158,7 +158,7 @@ exports.getSumarios = async (req, res, next) => {
     const [total] = await Sumarios.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, true);
     
     const [leerSumarios] = await Sumarios.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, false);
-    console.log('mensaje', leerSumarios);
+    console.log('mensaje resultados', leerSumarios);
 
     if (leerSumarios[0].length === 0) {
       throw new Error ("No se hallaron resultados, verifique sus parámetros de busqueda.");
@@ -169,10 +169,11 @@ exports.getSumarios = async (req, res, next) => {
     }
 
     let sumarios = [];
-
+    console.log(leerSumarios)
     if (leerSumarios[0].length > 0) {
      
       for (let clave in leerSumarios[0]){
+        console.log(clave)
         sumarios.push({
                         "metadata": 
                         {
@@ -182,20 +183,20 @@ exports.getSumarios = async (req, res, next) => {
                         
                         "content": 
                           {
-                            "id_sumario":             leerSumarios[0][0].id_sumario,
+                            "id_sumario":             leerSumarios[0][clave].id_sumario,
                             'jurisdiccion': 
                                                       {
                                                         "tipo": "LOCAL",
                                                         "pais": "Argentina",
                                                         "provincia": "FORMOSA",
-                                                        "localidad":  leerSumarios[0][0].localidad,
+                                                        "localidad":  leerSumarios[0][clave].localidad,
                                                         "id_pais": 11
                                                       },
-                            "fecha":                  leerSumarios[0][0].fecha,
-                            "numero_interno":         leerSumarios[0][0].id_interno,
-                            "titulo":                 leerSumarios[0][0].titulo,
-                            "descriptores":           leerSumarios[0][0].tema,
-                            "fecha_umod":             leerSumarios[0][0].fecha
+                            "fecha":                  leerSumarios[0][clave].fecha,
+                            "numero-interno":         leerSumarios[0][clave].id_interno,
+                            "titulo":                 leerSumarios[0][clave].titulo,
+                            "descriptores":           leerSumarios[0][clave].tema,
+                            "fecha_umod":             leerSumarios[0][clave].fecha
                         }
             
                     })
