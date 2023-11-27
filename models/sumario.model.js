@@ -26,9 +26,9 @@ module.exports = class Sumario {
   
   }
 
-  static get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit,total) { 
+  static get(publicacion_desde, publicacion_hasta, umod_desde, umod_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit,total) { 
     
-    return db.query('CALL c1jurisprudencia.SP_api_LeerSumarios(?,?,?,?,?,?,?,?,?)',[publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit,total]);
+    return db.query('CALL c1jurisprudencia.SP_api_LeerSumarios(?,?,?,?,?,?,?,?,?,?,?)',[publicacion_desde, publicacion_hasta, umod_desde, umod_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit,total]);
   
   }
 

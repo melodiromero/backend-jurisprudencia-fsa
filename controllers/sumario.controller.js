@@ -120,6 +120,8 @@ exports.getSumarios = async (req, res, next) => {
   console.log('inicio --------------- ', req.query);
   let publicacion_desde =  req.query.publicacion_desde;
   let publicacion_hasta =  req.query.publicacion_hasta;
+  let umod_desde        =  req.query.umod_desde;
+  let umod_hasta        =  req.query.umod_hasta;
   let fecha_umod        =  req.query.fecha_umod;
   let texto             =  req.query.texto;
   let descriptores      =  req.query.descriptores;
@@ -129,13 +131,21 @@ exports.getSumarios = async (req, res, next) => {
   
   try{
     /* Algunas validaciones si es que ingresa el parámetro */
-    
+       
     if (publicacion_desde && publicacion_desde.length < 10) {
-      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
+      throw new Error('Faltan datos. El parámetro publicacion_desde no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
     
     if (publicacion_hasta && publicacion_hasta.length < 10 ) {
-      throw new Error('Faltan datos. El parámetro de la fecha de fallo no está correcta. La forma correcta es: YYYY-MM-DD.');
+      throw new Error('Faltan datos. El parámetro publicacion_hasta no está correcta. La forma correcta es: YYYY-MM-DD.');
+    }
+
+    if (umod_desde && umod_desde.length < 10) {
+      throw new Error('Faltan datos. El parámetro umod_desde no está correcta. La forma correcta es: YYYY-MM-DD.');
+    }
+    
+    if (umod_hasta && umod_hasta.length < 10 ) {
+      throw new Error('Faltan datos. El parámetro umod_hasta no está correcta. La forma correcta es: YYYY-MM-DD.');
     }
 
     if (fecha_umod && fecha_umod.length <10) {
@@ -155,9 +165,9 @@ exports.getSumarios = async (req, res, next) => {
     }
 
     // Se lee primero el total de registros de la consulta
-    const [total] = await Sumarios.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, true);
+    const [total] = await Sumarios.get(publicacion_desde, publicacion_hasta, umod_desde, umod_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, true);
     
-    const [leerSumarios] = await Sumarios.get(publicacion_desde, publicacion_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, false);
+    const [leerSumarios] = await Sumarios.get(publicacion_desde, publicacion_hasta, umod_desde, umod_hasta, fecha_umod, texto, descriptores, tribunal, offset, limit, false);
     console.log('mensaje resultados', leerSumarios);
 
     if (leerSumarios[0].length === 0) {
