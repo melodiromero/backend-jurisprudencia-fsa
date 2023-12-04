@@ -23,7 +23,7 @@ module.exports = class Fallo {
   // La funcion get que llama al SP SP_api_LeerFallos() retorna un listado de fallos de acuerdo a los parametros de busqueda ingresados, caso contrario por defecto retorna los primeros 50 registros.
   static get(publicacion_desde, publicacion_hasta, umod_desde, umod_hasta, fecha_umod, texto, tribunal, offset, limit, total) { 
     
-    return db.query('CALL c1jurisprudencia.SP_api_LeerFallos(?,?,?,?,?,?,?,?,?,?)',[publicacion_desde, publicacion_hasta, fecha_umod, texto, tribunal, offset, limit, total]);
+    return db.query('CALL c1jurisprudencia.SP_api_LeerFallos(?,?,?,?,?,?,?,?,?,?)',[publicacion_desde, publicacion_hasta, umod_desde, umod_hasta, fecha_umod, texto, tribunal, offset, limit, total]);
   
   }
 
