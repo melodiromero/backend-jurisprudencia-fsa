@@ -2,15 +2,15 @@ const express           = require('express');
 
 const jwt               = require('jsonwebtoken');
 
-const rutaFallos        = require('./routes/v1.1/fallo.router');
+const rutaFallos        = require('./routes/v1.0/fallo.router');
 
-const rutaSumarios      = require('./routes/v1.1/sumario.router');
+const rutaSumarios      = require('./routes/v1.0/sumario.router');
 
-const rutaTribunales    = require('./routes/v1.1/tribunal.router');
+const rutaTribunales    = require('./routes/v1.0/tribunal.router');
 
-const rutaReporte       = require('./routes/v1.1/reporte.router');
+const rutaReporte       = require('./routes/v1.0/reporte.router');
 
-const rutaLogin         = require('./routes/v1.1/login.router');
+const rutaLogin         = require('./routes/v1.0/login.router');
 
 const errores           = require('./controllers/error.controller');
 
